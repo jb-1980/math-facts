@@ -1,11 +1,13 @@
 import React from "react"
 import { StyleSheet, css } from "aphrodite"
 
+import langStrings from "./lang"
+
 const styles = StyleSheet.create({
   numContainer: {
     display: "grid",
     gridTemplateColumns: "75px 75px 75px 75px",
-    gridTemplateRows: "75px 75px 75px 75px",
+    gridTemplateRows: "75px 75px 75px 75px 75px 75px",
     alignItems: "center",
     justifyItems: "center",
     width: 300,
@@ -41,11 +43,30 @@ const styles = StyleSheet.create({
     cursor: "pointer",
     userSelect: "none",
   },
+  selectors: {
+    gridColumn: "span 2",
+  },
+  selectorButton: {
+    border: "3px solid #3d3d3d",
+    borderRadius: "10px",
+    lineHeight: "50px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  selectedBackground: {
+    background: "#3d3d3d",
+    color: "#fff",
+  },
+  notSelectedBackground: {
+    background: "#fff",
+    color: "#3d3d3d",
+  },
   menuSelector: {
     position: "absolute",
     top: 0,
     zIndex: 5,
-    transition: "0.9s",
+    transition: ".9s",
   },
 })
 
@@ -56,7 +77,14 @@ class NumberSelector extends React.Component {
     this.setState(prevState => ({ sidebarOpen: !prevState.sidebarOpen }))
 
   render() {
-    const { selectSet, practiceSet } = this.props
+    const {
+      selectSet,
+      practiceSet,
+      lang,
+      changeLang,
+      selectOperation,
+      operation,
+    } = this.props
     const numberNodes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(num => (
       <div
         className={css(styles.num)}
@@ -110,9 +138,59 @@ class NumberSelector extends React.Component {
             className={css(styles.removeFilters)}
             onClick={() => selectSet()}
           >
-            Remove Filters
+            {langStrings[lang].remove_filters}
           </div>
           {numberNodes}
+          <button
+            className={css(
+              styles.selectors,
+              styles.selectorButton,
+              operation === "times"
+                ? styles.selectedBackground
+                : styles.notSelectedBackground
+            )}
+            onClick={() => selectOperation("times")}
+            style={{ width: 70, fontSize: 40 }}
+          >
+            &times;
+          </button>
+          <button
+            className={css(
+              styles.selectors,
+              styles.selectorButton,
+              operation === "divide"
+                ? styles.selectedBackground
+                : styles.notSelectedBackground
+            )}
+            onClick={() => selectOperation("divide")}
+            style={{ width: 70, fontSize: 40 }}
+          >
+            &divide;
+          </button>
+          <button
+            className={css(
+              styles.selectors,
+              styles.selectorButton,
+              lang === "en"
+                ? styles.selectedBackground
+                : styles.notSelectedBackground
+            )}
+            onClick={() => changeLang("en")}
+          >
+            English
+          </button>
+          <button
+            className={css(
+              styles.selectors,
+              styles.selectorButton,
+              lang === "spa"
+                ? styles.selectedBackground
+                : styles.notSelectedBackground
+            )}
+            onClick={() => changeLang("spa")}
+          >
+            Español
+          </button>
         </div>
       </div>
     )

@@ -4,13 +4,19 @@ import uuidV4 from "uuid/v4"
 import { StyleSheet, css } from "aphrodite"
 
 import FlashCard from "./FlashCard"
+import langStrings from "./lang"
 
 const factors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 const styles = StyleSheet.create({
-  flipContainer: {
+  timesflipContainer: {
     perspective: 1000,
     width: 200,
+    marginBottom: 20,
+  },
+  divideFlipContainer: {
+    perspective: 1000,
+    width: 300,
     marginBottom: 20,
   },
 })
@@ -66,16 +72,29 @@ class Deck extends React.Component {
           ]
         : null
 
+    const { lang, operation } = this.props
+
     return (
-      <div className={css(styles.flipContainer)}>
-        <div>{this.state.factors.length} cards remaining</div>
+      <div
+        className={css(
+          operation === "times"
+            ? styles.timesFlipContainer
+            : styles.divideFlipContainer
+        )}
+      >
+        <div>{`${this.state.factors.length} ${langStrings[lang]
+          .cards_remaining}`}</div>
         {mathFact ? (
-          <FlashCard nextCard={this.nextCard} mathFact={mathFact} />
+          <FlashCard
+            nextCard={this.nextCard}
+            mathFact={mathFact}
+            operation={operation}
+          />
         ) : (
           <div
             style={{
-              width: 200,
-              height: 300,
+              width: operation === "times" ? 200 : 300,
+              height: operation === "times" ? 300 : 200,
               background: "#3d3d3d",
               margin: "auto",
               fontSize: "40px",
