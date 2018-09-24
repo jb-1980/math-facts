@@ -3,7 +3,6 @@ import { render } from "react-dom"
 
 import Deck from "./Deck"
 import NumberSelector from "./NumberSelector"
-//import lang from "./lang"
 
 const styles = {
   fontFamily: "sans-serif",
@@ -23,12 +22,11 @@ class App extends React.Component {
   }
 
   selectSet = num =>
-    this.setState(prevState => {
+    this.setState(({ practiceSet }) => {
       if (!num) {
         // remove filter
         return { practiceSet: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
       }
-      const { practiceSet } = prevState
       if (practiceSet.length === 12) {
         return { practiceSet: [num] }
       }
@@ -46,7 +44,7 @@ class App extends React.Component {
     return (
       <div style={styles}>
         <Deck
-          practiceSet={this.state.practiceSet}
+          defaultPracticeSet={this.state.practiceSet}
           lang={this.state.lang}
           operation={this.state.operation}
         />

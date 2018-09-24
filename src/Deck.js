@@ -4,6 +4,8 @@ import uuidV4 from "uuid/v4"
 import { StyleSheet, css } from "aphrodite"
 
 import FlashCard from "./FlashCard"
+import TimesCard from "./TimesCard"
+import DivisionCard from "./DivisionCard"
 import langStrings from "./lang"
 
 const factors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
@@ -22,50 +24,48 @@ const styles = StyleSheet.create({
 })
 
 class Deck extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      factors: factors.reduce((acc, factor) => {
-        this.props.practiceSet.forEach(f => {
-          acc.push({
-            factor1: f,
-            factor2: factor,
-            answer: factor * f,
-            correct: null,
-            id: uuidV4(),
-          })
+  state = {
+    factors: factors.reduce((acc, factor) => {
+      this.props.defaultPracticeSet.forEach(f => {
+        acc.push({
+          factor1: f,
+          factor2: factor,
+          answer: factor * f,
+          correct: null,
+          id: uuidV4(),
         })
-        return acc
-      }, []),
+      })
+      return acc
+    }, []),
+  }
+
+  componentDidUpdate({ defaultPracticeSet }) {
+    if (defaultPracticeSet !== this.props.defaultPracticeSet) {
+      this.setState({
+        factors: factors.reduce((acc, factor) => {
+          this.props.defaultPracticeSet.forEach(f => {
+            acc.push({
+              factor1: f,
+              factor2: factor,
+              answer: factor * f,
+              correct: null,
+              id: uuidV4(),
+            })
+          })
+          return acc
+        }, []),
+      })
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { practiceSet } = nextProps
-    this.setState({
-      factors: factors.reduce((acc, factor) => {
-        practiceSet.forEach(f => {
-          acc.push({
-            factor1: f,
-            factor2: factor,
-            answer: factor * f,
-            correct: null,
-            id: uuidV4(),
-          })
-        })
-        return acc
-      }, []),
-    })
-  }
-
   nextCard = id => {
-    this.setState(prevState => ({
-      factors: prevState.factors.filter(f => f.id !== id),
+    this.setState(({ factors }) => ({
+      factors: factors.filter(f => f.id !== id),
     }))
   }
 
   render() {
-    const mathFact =
+    const currentCard =
       this.state.factors.length > 0
         ? this.state.factors[
             Math.floor(Math.random() * this.state.factors.length)
@@ -82,13 +82,28 @@ class Deck extends React.Component {
             : styles.divideFlipContainer
         )}
       >
-        <div>{`${this.state.factors.length} ${langStrings[lang]
-          .cards_remaining}`}</div>
-        {mathFact ? (
+        <div>{`${this.state.factors.length} ${
+          langStrings[lang].cards_remaining
+        }`}</div>
+        {currentCard ? (
           <FlashCard
-            nextCard={this.nextCard}
-            mathFact={mathFact}
-            operation={operation}
+            render={({ showAnswer, toggleShowAnswer }) =>
+              operation === "times" ? (
+                <TimesCard
+                  mathFact={currentCard}
+                  nextCard={this.nextCard}
+                  showAnswer={showAnswer}
+                  toggleShowAnswer={toggleShowAnswer}
+                />
+              ) : (
+                <DivisionCard
+                  mathFact={currentCard}
+                  nextCard={this.nextCard}
+                  showAnswer={showAnswer}
+                  toggleShowAnswer={toggleShowAnswer}
+                />
+              )
+            }
           />
         ) : (
           <div
