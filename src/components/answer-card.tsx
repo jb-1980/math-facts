@@ -19,5 +19,6 @@ export const AnswerCard = styled.div<{
   top: 0;
   left: 0;
   transform: rotateY(180deg);
+  border-radius: 10px;
   z-index: ${(props) => (props.showAnswer ? 2 : 0)};
 `

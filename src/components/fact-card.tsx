@@ -14,5 +14,6 @@ export const FactCard = styled.div<{ multiply?: true }>`
   top: 0px;
   left: 0px;
   transform: rotateY(0deg);
+  border-radius: 10px;
   background: #3d3d3d;
 `
