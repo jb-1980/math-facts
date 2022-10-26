@@ -7,4 +7,4 @@ export default {
     cards_remaining: "tarjetas restantes",
     remove_filters: "Quitar filtros",
   },
-}
+} as const
