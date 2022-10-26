@@ -9,7 +9,7 @@ export const FlashCard = styled.div<{ multiply?: true; flipped: boolean }>`
   transition: 0.6s;
   transform-style: preserve-3d;
   position: relative;
-  border-radius: 2px;
+  border-radius: 10px;
   ${(props) =>
     props.flipped ? "transform: rotateY(180deg);" : "transform: rotateY(0deg);"}
 `

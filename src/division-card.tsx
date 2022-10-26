@@ -1,10 +1,11 @@
 import { FlashCard } from "./components/flash-card"
 import { FactCard } from "./components/fact-card"
 import { AnswerCard } from "./components/answer-card"
-import { NextCardButton } from "./components/next-card-button"
 import { Factor } from "./components/factor"
 import { useState } from "react"
 import { TMathFact } from "./types"
+import { CorrectButton, IncorrectButton } from "./components/answer-buttons"
+import { useGlobalContext } from "./context"
 
 export const DivisionCard = ({
   mathFact,
@@ -13,6 +14,7 @@ export const DivisionCard = ({
   mathFact: TMathFact
   nextCard: (id: string) => void
 }) => {
+  const { dispatch } = useGlobalContext()
   const [showAnswer, setShowAnswer] = useState(false)
   return (
     <FlashCard
@@ -37,9 +39,24 @@ export const DivisionCard = ({
       </FactCard>
       <AnswerCard showAnswer={showAnswer}>
         <div>{showAnswer && mathFact.factor2}</div>
-        <NextCardButton onClick={() => nextCard(mathFact.id)}>
-          Next Card
-        </NextCardButton>
+        <div style={{ display: "flex", gap: 50 }}>
+          <IncorrectButton
+            onClick={() => {
+              dispatch({ type: "incorrect" })
+              nextCard(mathFact.id)
+            }}
+          >
+            X
+          </IncorrectButton>
+          <CorrectButton
+            onClick={() => {
+              dispatch({ type: "correct" })
+              nextCard(mathFact.id)
+            }}
+          >
+            ✔
+          </CorrectButton>
+        </div>
       </AnswerCard>
     </FlashCard>
   )
