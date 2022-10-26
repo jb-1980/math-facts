@@ -3,9 +3,9 @@ import { Factor } from "./components/factor"
 import { Times } from "./components/times"
 import { AnswerCard } from "./components/answer-card"
 import { FlashCard } from "./components/flash-card"
-import { NextCardButton } from "./components/next-card-button"
 import { useState } from "react"
 import { TMathFact } from "./types"
+import { CorrectButton, IncorrectButton } from "./components/answer-buttons"
 
 export const TimesCard = ({
   mathFact,
@@ -36,9 +36,12 @@ export const TimesCard = ({
       </FactCard>
       <AnswerCard showAnswer={showAnswer} multiply>
         <div>{showAnswer && mathFact.answer}</div>
-        <NextCardButton onClick={() => nextCard(mathFact.id)}>
-          Next Card
-        </NextCardButton>
+        <div style={{ display: "flex", gap: 50 }}>
+          <IncorrectButton onClick={() => nextCard(mathFact.id)}>
+            X
+          </IncorrectButton>
+          <CorrectButton onClick={() => nextCard(mathFact.id)}>✔</CorrectButton>
+        </div>
       </AnswerCard>
     </FlashCard>
   )
